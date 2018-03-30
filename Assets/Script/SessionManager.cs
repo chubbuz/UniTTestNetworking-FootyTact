@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 using System;
 
@@ -9,13 +10,13 @@ public class SessionManager : MonoBehaviour {
 	private bool hasSent = false;
 	public int time = 8;
 	public  int startTime;
-
+	public string timeUI;
 	public bool toStartCount;
 
-
+	Text timeRem;
 	void Start () {
-		
 		toStartCount = false;
+		timeUI = "Game Hasn't Started Yet";
 	}
 	
 	// Update is called once per frame
@@ -30,6 +31,7 @@ public class SessionManager : MonoBehaviour {
 				GameObject serverPlayer = GameObject.Find ("ServerPlayer");
 
 				print ("Time is Up");
+				timeUI = "Time is Up";	
 				toStartCount = false;
 				hasSent = true;
 
@@ -42,7 +44,8 @@ public class SessionManager : MonoBehaviour {
 				netMan.GetComponent<Linker>().Send();
 
 			} else {
-				//print ("time remaining=" + (time - DateTime.Now.Second + startTime));
+				timeUI="Time Remaining:-" + (time - DateTime.Now.Second + startTime);
+
 			}
 
 		}

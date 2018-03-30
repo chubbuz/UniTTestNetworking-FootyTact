@@ -8,6 +8,8 @@ TagManager:
   - ThePlayer
   - ClientPlayer
   - ServerPlayer
+  - Timer
+  - Canvas
   layers:
   - Default
   - TransparentFX
