@@ -54,7 +54,6 @@
      <Compile Include="Assets\Script\Linker.cs" />
      <Compile Include="Assets\Script\Movement.cs" />
      <Compile Include="Assets\Script\SessionManager.cs" />
-     <Compile Include="Assets\Script\Time Manger.cs" />
      <Compile Include="Assets\Script\TimeUI.cs" />
  <Reference Include="UnityEngine.UIAutomation">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UIAutomation/UnityEngine.UIAutomation.dll</HintPath>

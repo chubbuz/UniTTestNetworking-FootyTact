@@ -10,6 +10,16 @@ TagManager:
   - ServerPlayer
   - Timer
   - Canvas
+  - ServerPlayer1
+  - ServerPlayer2
+  - ServerPlayer4
+  - ServerPlayer3
+  - ClientPlayer0
+  - ClientPlayer1
+  - ClientPlayer2
+  - ClientPlayer3
+  - ClientPlayer4
+  - ServerPlayer0
   layers:
   - Default
   - TransparentFX

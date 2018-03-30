@@ -151,7 +151,6 @@
 'Assets/Script/Linker.cs'
 'Assets/Script/Movement.cs'
 'Assets/Script/SessionManager.cs'
-'Assets/Script/Time Manger.cs'
 'Assets/Script/TimeUI.cs'
 -r:'/Applications/Unity/Unity.app/Contents/Mono/lib/mono/unity/System.Runtime.Serialization.dll'
 -r:'/Applications/Unity/Unity.app/Contents/Mono/lib/mono/unity/System.Xml.Linq.dll'

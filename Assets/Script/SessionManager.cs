@@ -27,8 +27,17 @@ public class SessionManager : MonoBehaviour {
 		if (!hasSent && toStartCount) {
 			if (DateTime.Now.Second - startTime > time) {
 
-				GameObject clientPlayer = GameObject.Find("ClientPlayer");
-				GameObject serverPlayer = GameObject.Find ("ServerPlayer");
+				GameObject clientPlayer0 = GameObject.Find("ClientPlayer0");
+				GameObject clientPlayer1 = GameObject.Find("ClientPlayer1");
+				GameObject clientPlayer2 = GameObject.Find("ClientPlayer2");
+				GameObject clientPlayer3 = GameObject.Find("ClientPlayer3");
+				GameObject clientPlayer4 = GameObject.Find("ClientPlayer4");
+
+				GameObject serverPlayer0 = GameObject.Find ("ServerPlayer0");
+				GameObject serverPlayer1 = GameObject.Find ("ServerPlayer1");
+				GameObject serverPlayer2 = GameObject.Find ("ServerPlayer2");
+				GameObject serverPlayer3 = GameObject.Find ("ServerPlayer3");
+				GameObject serverPlayer4 = GameObject.Find ("ServerPlayer4");
 
 				print ("Time is Up");
 				timeUI = "Time is Up";	
@@ -36,8 +45,18 @@ public class SessionManager : MonoBehaviour {
 				hasSent = true;
 
 				print ("deactivating server movements");
-				clientPlayer.GetComponent<Movement> ().isMovementAllowed = false;
-				serverPlayer.GetComponent<Movement> ().isMovementAllowed = false;
+				clientPlayer0.GetComponent<Movement> ().isMovementAllowed = false;
+				clientPlayer1.GetComponent<Movement> ().isMovementAllowed = false;
+				clientPlayer2.GetComponent<Movement> ().isMovementAllowed = false;
+				clientPlayer3.GetComponent<Movement> ().isMovementAllowed = false;
+				clientPlayer4.GetComponent<Movement> ().isMovementAllowed = false;
+
+
+				serverPlayer0.GetComponent<Movement> ().isMovementAllowed = false;
+				serverPlayer1.GetComponent<Movement> ().isMovementAllowed = false;
+				serverPlayer2.GetComponent<Movement> ().isMovementAllowed = false;
+				serverPlayer3.GetComponent<Movement> ().isMovementAllowed = false;
+				serverPlayer4.GetComponent<Movement> ().isMovementAllowed = false;
 
 				print ("Calling Send Function from SessionManager");
 				GameObject netMan = GameObject.FindWithTag("Linker");
