@@ -6,12 +6,7 @@ using System;
 
 
 public class Linker : NetworkBehaviour {
-
-
-	public GameObject inst;
- 
-
-
+	
 	// Use this for initialization
 	void Start () {
 		print ("linker started");
@@ -84,23 +79,19 @@ public class Linker : NetworkBehaviour {
 	public 	void Send()
 	{
 		print ("Invoking Command");
-		GameObject clientPlayer0 = GameObject.Find("ClientPlayer0");
-		GameObject clientPlayer1 = GameObject.Find("ClientPlayer1");
-		GameObject clientPlayer2 = GameObject.Find("ClientPlayer2");
-		GameObject clientPlayer3 = GameObject.Find("ClientPlayer3");
-		GameObject clientPlayer4 = GameObject.Find("ClientPlayer4");
+		if (isClient) {
+			GameObject clientPlayer0 = GameObject.Find("ClientPlayer0");
+			GameObject clientPlayer1 = GameObject.Find("ClientPlayer1");
+			GameObject clientPlayer2 = GameObject.Find("ClientPlayer2");
+			GameObject clientPlayer3 = GameObject.Find("ClientPlayer3");
+			GameObject clientPlayer4 = GameObject.Find("ClientPlayer4");
 
+			Transform state0=clientPlayer0.GetComponent<Movement> ().State;
+			Transform state1=clientPlayer1.GetComponent<Movement> ().State;
+			Transform state2=clientPlayer2.GetComponent<Movement> ().State;
+			Transform state3=clientPlayer3.GetComponent<Movement> ().State;
+			Transform state4=clientPlayer4.GetComponent<Movement> ().State;
 
-		GameObject serverPlayer = GameObject.Find ("ServerPlayer");
-
-		Transform state0=clientPlayer0.GetComponent<Movement> ().State;
-		Transform state1=clientPlayer1.GetComponent<Movement> ().State;
-		Transform state2=clientPlayer2.GetComponent<Movement> ().State;
-		Transform state3=clientPlayer3.GetComponent<Movement> ().State;
-		Transform state4=clientPlayer4.GetComponent<Movement> ().State;
-	
-
-		if (isClient)
 			CmdEngine (state0.transform.position, state0.transform.rotation,
 				state1.transform.position, state1.transform.rotation,
 				state2.transform.position, state2.transform.rotation,
@@ -108,6 +99,37 @@ public class Linker : NetworkBehaviour {
 				state4.transform.position, state4.transform.rotation
 			
 			);
+		}
+		else {
+			//Server to ServerEngine
+
+			GameObject serverPlayer0 = GameObject.Find ("ServerPlayer0");
+			GameObject serverPlayer1 = GameObject.Find ("ServerPlayer1");
+			GameObject serverPlayer2 = GameObject.Find ("ServerPlayer2");
+			GameObject serverPlayer3 = GameObject.Find ("ServerPlayer3");
+			GameObject serverPlayer4 = GameObject.Find ("ServerPlayer4");
+
+
+
+			Transform state0=serverPlayer0.GetComponent<Movement> ().State;
+			Transform state1=serverPlayer1.GetComponent<Movement> ().State;
+			Transform state2=serverPlayer2.GetComponent<Movement> ().State;
+			Transform state3=serverPlayer3.GetComponent<Movement> ().State;
+			Transform state4=serverPlayer4.GetComponent<Movement> ().State;
+
+
+
+			GameObject Engine = GameObject.FindWithTag ("GameController");
+			Engine.GetComponent<Engine> ().ServerPosition (state0.transform.position, state0.transform.rotation,
+				state1.transform.position, state1.transform.rotation,
+				state2.transform.position, state2.transform.rotation,
+				state3.transform.position, state3.transform.rotation,
+				state4.transform.position, state4.transform.rotation
+
+			);
+
+		}
+
 
 		print ("Invoking attempt completed");
 
@@ -130,21 +152,11 @@ public class Linker : NetworkBehaviour {
 		print (">>>>>>>>>>>Client invoked Command fucntion<<<<<<<");
 		//print ("The state of client is:" + x);
 
-		inst.transform.SetPositionAndRotation (x0,y0);
-		Instantiate (inst);
 
-		inst.transform.SetPositionAndRotation (x1,y1);
-		Instantiate (inst);
 
-		inst.transform.SetPositionAndRotation (x2,y2);
-		Instantiate (inst);
 
-		inst.transform.SetPositionAndRotation (x3,y3);
-		Instantiate (inst);
-
-		inst.transform.SetPositionAndRotation (x4,y4);
-		Instantiate (inst);
-
+		GameObject Engine = GameObject.FindWithTag ("GameController");
+		Engine.GetComponent<Engine> ().ClientPosition (x0,y0,x1,y1,x2,y2,x3,y3,x4,y4);
 
 	}
 }
