@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Linker
   - ThePlayer
+  - ClientPlayer
+  - ServerPlayer
   layers:
   - Default
   - TransparentFX
