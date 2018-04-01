@@ -12,11 +12,13 @@ public class SessionManager : MonoBehaviour {
 	public  int startTime;
 	public string timeUI;
 	public bool toStartCount;
+	public bool isTimeUp;
 
 	Text timeRem;
 	void Start () {
 		toStartCount = false;
 		timeUI = "Game Hasn't Started Yet";
+		isTimeUp = false;
 	}
 	
 	// Update is called once per frame
@@ -25,7 +27,7 @@ public class SessionManager : MonoBehaviour {
 
 		//if time Ended	
 		if (!hasSent && toStartCount) {
-			if (DateTime.Now.Second - startTime > time) {
+			if (isTimeUp) {
 
 				GameObject clientPlayer0 = GameObject.Find("ClientPlayer0");
 				GameObject clientPlayer1 = GameObject.Find("ClientPlayer1");
@@ -39,32 +41,34 @@ public class SessionManager : MonoBehaviour {
 				GameObject serverPlayer3 = GameObject.Find ("ServerPlayer3");
 				GameObject serverPlayer4 = GameObject.Find ("ServerPlayer4");
 
-				print ("Time is Up");
+			//	//print ("Time is Up");
 				timeUI = "Time is Up";	
 				toStartCount = false;
 				hasSent = true;
 
-				print ("deactivating server movements");
-				clientPlayer0.GetComponent<Movement> ().isMovementAllowed = false;
-				clientPlayer1.GetComponent<Movement> ().isMovementAllowed = false;
-				clientPlayer2.GetComponent<Movement> ().isMovementAllowed = false;
-				clientPlayer3.GetComponent<Movement> ().isMovementAllowed = false;
-				clientPlayer4.GetComponent<Movement> ().isMovementAllowed = false;
+//				//print ("deactivating server movements");
+				clientPlayer0.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
+				clientPlayer1.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
+				clientPlayer2.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
+				clientPlayer3.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
+				clientPlayer4.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
 
 
-				serverPlayer0.GetComponent<Movement> ().isMovementAllowed = false;
-				serverPlayer1.GetComponent<Movement> ().isMovementAllowed = false;
-				serverPlayer2.GetComponent<Movement> ().isMovementAllowed = false;
-				serverPlayer3.GetComponent<Movement> ().isMovementAllowed = false;
-				serverPlayer4.GetComponent<Movement> ().isMovementAllowed = false;
+				serverPlayer0.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
+				serverPlayer1.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
+				serverPlayer2.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
+				serverPlayer3.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
+				serverPlayer4.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
 
-				print ("Calling Send Function from SessionManager");
-				GameObject netMan = GameObject.FindWithTag("Linker");
-				netMan.GetComponent<Linker>().Send();
+				//print ("Calling Send Function from SessionManager");
+				GameObject linker = GameObject.FindWithTag("Linker");
+				linker.GetComponent<Linker>().Send();
 
 			} else {
 				timeUI="Time Remaining:-" + (time - DateTime.Now.Second + startTime);
-
+				if (DateTime.Now.Second - startTime > time) {
+					isTimeUp = true;
+				}
 			}
 
 		}

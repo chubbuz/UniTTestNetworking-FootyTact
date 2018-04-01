@@ -51,9 +51,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Script\BallBehaviour.cs" />
      <Compile Include="Assets\Script\Engine.cs" />
+     <Compile Include="Assets\Script\Execution.cs" />
      <Compile Include="Assets\Script\Linker.cs" />
-     <Compile Include="Assets\Script\Movement.cs" />
+     <Compile Include="Assets\Script\PlayerBehaviour.cs" />
      <Compile Include="Assets\Script\SessionManager.cs" />
      <Compile Include="Assets\Script\TimeUI.cs" />
  <Reference Include="UnityEngine.UIAutomation">
