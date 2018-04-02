@@ -8,75 +8,43 @@ using System;
 public class Linker : NetworkBehaviour {
 	
 	// Use this for initialization
+	private GameObject[] server;
+	private GameObject[] client;
+	private Transform[] state;
+
+
 	void Start () {
-		print ("linker started");
-
-//		//print ("setting controller");
+//		print ("linker started");
 		GameObject controller = GameObject.FindGameObjectWithTag ("GameController");
-//		//print ("setting on component-SessionManager");
-		controller.GetComponent<SessionManager> ().startTime=DateTime.Now.Second;
-	//	controller.GetComponent<Execution>().amIServer=true;
-
-//		//print ("enabling counting From linker");
-
-
-
-			controller.GetComponent<SessionManager> ().toStartCount = true;
-//		//print ("counting Enabled");
+		controller.GetComponent<SessionManager> ().toStartCount = true;
 
 		//enabling respective player controls
-		GameObject clientPlayer0 = GameObject.Find("ClientPlayer0");
-		GameObject clientPlayer1 = GameObject.Find("ClientPlayer1");
-		GameObject clientPlayer2 = GameObject.Find("ClientPlayer2");
-		GameObject clientPlayer3 = GameObject.Find("ClientPlayer3");
-		GameObject clientPlayer4 = GameObject.Find("ClientPlayer4");
-
-		GameObject serverPlayer0 = GameObject.Find ("ServerPlayer0");
-		GameObject serverPlayer1 = GameObject.Find ("ServerPlayer1");
-		GameObject serverPlayer2 = GameObject.Find ("ServerPlayer2");
-		GameObject serverPlayer3 = GameObject.Find ("ServerPlayer3");
-		GameObject serverPlayer4 = GameObject.Find ("ServerPlayer4");
+		server = new GameObject[5];
+		client = new GameObject[5];
+		state = new Transform[5];
 
 
-		if (isServer) {
-			//Server Sever Server
-			//print ("I am a Server");
-			clientPlayer0.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
-			clientPlayer1.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
-			clientPlayer2.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
-			clientPlayer3.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
-			clientPlayer4.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
+		for (int i = 0; i < 5; i++) {
+			server [i] = GameObject.Find ("ServerPlayer" + i);
+			client [i] = GameObject.Find ("ClientPlayer" + i);
 
+			if (isServer) {
+				//Server Sever Server
+				client [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
+				server [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = true;
+				controller.GetComponent<SessionManager> ().oppTeam = "ClientPlayer";
+				controller.GetComponent<SessionManager> ().amIServer = true;
 
-			serverPlayer0.GetComponent<PlayerBehaviour> ().isMovementAllowed = true;
-			serverPlayer1.GetComponent<PlayerBehaviour> ().isMovementAllowed = true;
-			serverPlayer2.GetComponent<PlayerBehaviour> ().isMovementAllowed = true;
-			serverPlayer3.GetComponent<PlayerBehaviour> ().isMovementAllowed = true;
-			serverPlayer4.GetComponent<PlayerBehaviour> ().isMovementAllowed = true;
+			} else {
+				//Client Client Client
+				//print ("I am a client");
+				client [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = true;
+				server [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
+				controller.GetComponent<SessionManager> ().oppTeam = "ServerPlayer";
+				controller.GetComponent<SessionManager> ().amIServer = false;
 
-			//controller.GetComponent<Execution>().amIServer=true;
-
-
-		} else {
-			//Client Client Client
-			//print ("I am a client");
-			clientPlayer0.GetComponent<PlayerBehaviour> ().isMovementAllowed = true;
-			clientPlayer1.GetComponent<PlayerBehaviour> ().isMovementAllowed = true;
-			clientPlayer2.GetComponent<PlayerBehaviour> ().isMovementAllowed = true;
-			clientPlayer3.GetComponent<PlayerBehaviour> ().isMovementAllowed = true;
-			clientPlayer4.GetComponent<PlayerBehaviour> ().isMovementAllowed = true;
-
-
-			serverPlayer0.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
-			serverPlayer1.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
-			serverPlayer2.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
-			serverPlayer3.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
-			serverPlayer4.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
-
-			//controller.GetComponent<Execution>().amIServer=false;
+			}
 		}
-	
-//		//print ("Server or Client has been initialized");
 	}
 
 
@@ -89,49 +57,29 @@ public class Linker : NetworkBehaviour {
 
 
 		if (isClient) {
-			GameObject clientPlayer0 = GameObject.Find("ClientPlayer0");
-			GameObject clientPlayer1 = GameObject.Find("ClientPlayer1");
-			GameObject clientPlayer2 = GameObject.Find("ClientPlayer2");
-			GameObject clientPlayer3 = GameObject.Find("ClientPlayer3");
-			GameObject clientPlayer4 = GameObject.Find("ClientPlayer4");
-
-			Transform state0=clientPlayer0.GetComponent<PlayerBehaviour>().attemptedState;
-			Transform state1=clientPlayer1.GetComponent<PlayerBehaviour>().attemptedState;
-			Transform state2=clientPlayer2.GetComponent<PlayerBehaviour>().attemptedState;
-			Transform state3=clientPlayer3.GetComponent<PlayerBehaviour>().attemptedState;
-			Transform state4=clientPlayer4.GetComponent<PlayerBehaviour>().attemptedState;
-
+			for (int i = 0; i < 5; i++) {
+				state [i]= client[i].GetComponent<PlayerBehaviour>().attemptedState;
+			}
 
 			if (!ball.GetComponent<BallBehaviour> ().isBallWithServer) {
 				ballPos =ball.GetComponent<BallBehaviour> ().attemptedPos;
 			}
 
 
-			CmdSendToEngine (state0.transform.position, state0.transform.rotation,
-				state1.transform.position, state1.transform.rotation,
-				state2.transform.position, state2.transform.rotation,
-				state3.transform.position, state3.transform.rotation,
-				state4.transform.position, state4.transform.rotation,
+			CmdSendToEngine (state[0].transform.position, state[0].transform.rotation,
+				state[1].transform.position, state[1].transform.rotation,
+				state[2].transform.position, state[2].transform.rotation,
+				state[3].transform.position, state[3].transform.rotation,
+				state[4].transform.position, state[4].transform.rotation,
 				ballPos
 			
 			);
 		}
 		else {
 			//Server to ServerEngine
-
-			GameObject serverPlayer0 = GameObject.Find ("ServerPlayer0");
-			GameObject serverPlayer1 = GameObject.Find ("ServerPlayer1");
-			GameObject serverPlayer2 = GameObject.Find ("ServerPlayer2");
-			GameObject serverPlayer3 = GameObject.Find ("ServerPlayer3");
-			GameObject serverPlayer4 = GameObject.Find ("ServerPlayer4");
-
-
-
-			Transform state0=serverPlayer0.GetComponent<PlayerBehaviour>().attemptedState;
-			Transform state1=serverPlayer1.GetComponent<PlayerBehaviour>().attemptedState;
-			Transform state2=serverPlayer2.GetComponent<PlayerBehaviour>().attemptedState;
-			Transform state3=serverPlayer3.GetComponent<PlayerBehaviour>().attemptedState;
-			Transform state4=serverPlayer4.GetComponent<PlayerBehaviour>().attemptedState;
+			for (int i = 0; i < 5; i++) {
+				state [i] = server[i].GetComponent<PlayerBehaviour>().attemptedState;
+			}
 
 			if (ball.GetComponent<BallBehaviour> ().isBallWithServer) {
 				ballPos =ball.GetComponent<BallBehaviour> ().attemptedPos;
@@ -139,12 +87,13 @@ public class Linker : NetworkBehaviour {
 
 
 			GameObject Engine = GameObject.FindWithTag ("GameController");
-			Engine.GetComponent<Engine> ().ServerPosition (state0.transform.position, state0.transform.rotation,
-				state1.transform.position, state1.transform.rotation,
-				state2.transform.position, state2.transform.rotation,
-				state3.transform.position, state3.transform.rotation,
-				state4.transform.position, state4.transform.rotation,
+			Engine.GetComponent<Engine> ().ServerPosition (state[0].transform.position, state[0].transform.rotation,
+				state[1].transform.position, state[1].transform.rotation,
+				state[2].transform.position, state[2].transform.rotation,
+				state[3].transform.position, state[3].transform.rotation,
+				state[4].transform.position, state[4].transform.rotation,
 				ballPos
+
 
 			);
 
@@ -177,16 +126,16 @@ public class Linker : NetworkBehaviour {
 	}
 
 
+	//From Engine to the Linker ulitmately to the client
 	public void RecieveEngineOutput(Vector3[] serverUpdate , Vector3[] clientUpdate){
 		RpcClientEngineOutput (serverUpdate,clientUpdate);
-		GameObject controller = GameObject.FindGameObjectWithTag ("GameController");	
+		GameObject controller = GameObject.FindGameObjectWithTag ("GameController");
 		controller.GetComponent<Execution> ().Execute (serverUpdate,clientUpdate);
-	}
-		
 
+	}
 	[ClientRpc]
 	public void RpcClientEngineOutput(Vector3[] serverUpdate ,Vector3[] clientUpdate){
-		GameObject controller = GameObject.FindGameObjectWithTag ("GameController");	
+		GameObject controller = GameObject.FindGameObjectWithTag ("GameController");
 		controller.GetComponent<Execution> ().Execute (serverUpdate, clientUpdate);
 	}
 }

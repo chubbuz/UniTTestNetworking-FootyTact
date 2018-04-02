@@ -7,18 +7,39 @@ using System;
 public class SessionManager : MonoBehaviour {
 
 	// Use this for initialization
-	private bool hasSent = false;
-	public int time = 8;
-	public  int startTime;
+	public int sessionTime = 15;
+
+
 	public string timeUI;
 	public bool toStartCount;
-	public bool isTimeUp;
+	public string oppTeam;
+	public bool amIServer;
+	public Text timeRem;
 
-	Text timeRem;
+	private bool isTimeUp;
+	private int sessionCount;
+	private bool hasSent ;
+	private GameObject[] server;
+	private GameObject[] client;
+	private float timeLeft;
+
 	void Start () {
 		toStartCount = false;
+		sessionCount = 1;
 		timeUI = "Game Hasn't Started Yet";
 		isTimeUp = false;
+		hasSent = false;
+
+		server = new GameObject[5];
+		client = new GameObject[5];
+		timeLeft = (float)sessionTime;
+
+
+		for (int i = 0; i < 5; i++) {
+			server[i]=GameObject.Find("ServerPlayer"+i);
+			client[i]=GameObject.Find("ClientPlayer"+i);
+
+		}
 	}
 	
 	// Update is called once per frame
@@ -28,49 +49,70 @@ public class SessionManager : MonoBehaviour {
 		//if time Ended	
 		if (!hasSent && toStartCount) {
 			if (isTimeUp) {
+				
 
-				GameObject clientPlayer0 = GameObject.Find("ClientPlayer0");
-				GameObject clientPlayer1 = GameObject.Find("ClientPlayer1");
-				GameObject clientPlayer2 = GameObject.Find("ClientPlayer2");
-				GameObject clientPlayer3 = GameObject.Find("ClientPlayer3");
-				GameObject clientPlayer4 = GameObject.Find("ClientPlayer4");
-
-				GameObject serverPlayer0 = GameObject.Find ("ServerPlayer0");
-				GameObject serverPlayer1 = GameObject.Find ("ServerPlayer1");
-				GameObject serverPlayer2 = GameObject.Find ("ServerPlayer2");
-				GameObject serverPlayer3 = GameObject.Find ("ServerPlayer3");
-				GameObject serverPlayer4 = GameObject.Find ("ServerPlayer4");
 
 			//	//print ("Time is Up");
-				timeUI = "Time is Up";	
+				timeUI = "Session:"+sessionCount+"Ended";	
 				toStartCount = false;
 				hasSent = true;
 
 //				//print ("deactivating server movements");
-				clientPlayer0.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
-				clientPlayer1.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
-				clientPlayer2.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
-				clientPlayer3.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
-				clientPlayer4.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
+				for (int i = 0; i < 5; i++) {
+					client[i].GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
+					server[i].GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
 
+					//cleaning lines
+					LineRenderer cLine,sLine;
+					cLine=client[i].GetComponent<LineRenderer>();
+					cLine.startWidth = 0.0f;
+					cLine.endWidth = 0.0f;
+					sLine=server[i].GetComponent<LineRenderer>();
+					sLine.startWidth = 0.0f;
+					sLine.endWidth = 0.0f;
 
-				serverPlayer0.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
-				serverPlayer1.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
-				serverPlayer2.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
-				serverPlayer3.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
-				serverPlayer4.GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
+					sLine = null;
+					cLine = null;
+				}
 
 				//print ("Calling Send Function from SessionManager");
 				GameObject linker = GameObject.FindWithTag("Linker");
 				linker.GetComponent<Linker>().Send();
 
 			} else {
-				timeUI="Time Remaining:-" + (time - DateTime.Now.Second + startTime);
-				if (DateTime.Now.Second - startTime > time) {
+				timeLeft -= Time.deltaTime;
+
+				timeUI = sessionCount+":" + (int)timeLeft;
+				if (timeLeft<0) {
 					isTimeUp = true;
 				}
+
+
+
 			}
 
 		}
 	}
+
+	public void StartNextSession(){
+		hasSent = false;
+		toStartCount = true;
+		isTimeUp = false;
+		sessionCount++;
+		//print ("activating movements for next session");
+		for (int i = 0; i < 5; i++) {
+			if (amIServer) {
+				//Server Sever Server
+				client [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
+				server [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = true;
+			} else {
+				//Client Client Client
+				client [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = true;
+				server [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
+			}
+		}
+		timeLeft = (float)sessionTime;
+	}
+
+
 }

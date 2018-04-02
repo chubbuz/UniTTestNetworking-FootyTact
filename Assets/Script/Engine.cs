@@ -16,12 +16,39 @@ public class Engine : MonoBehaviour {
 	//proposed tactics info
 	private Vector3[] server;
 	private Vector3[] client;
+	//previous position
+	private Vector3[] serverPrev;
+	private Vector3[] clientPrev;
+
+	//All the information of the game
+	private Plane plane;
+	private Vector3 playerSize;
 
 	void Start(){
 		hasEngineStarted = false;
 
+		//init new Position array
 		server = new Vector3[5];
 		client = new Vector3[5];
+
+		//init sarting pos of players
+		serverPrev = new Vector3[5];
+		clientPrev = new Vector3[5];
+		for (int i = 0; i < 5; i++) {
+			serverPrev[i] = GameObject.Find ("ServerPlayer" + i).transform.position;
+			clientPrev [i] = GameObject.Find ("ClientPlayer"+i).transform.position;
+		}
+		//init size of player
+		GameObject sample = GameObject.Find ("ServerPlayer0");
+		playerSize = sample.GetComponent<Collider> ().bounds.size;
+
+
+		//init ground plane
+		GameObject ground = GameObject.Find ("Plane");
+		Vector3 groundPos = ground.transform.position;
+		plane = new Plane(Vector3.up,groundPos);
+
+
 	}
 
 	public void ClientPosition(Vector3 cPos0,Quaternion cRot0,
@@ -33,7 +60,7 @@ public class Engine : MonoBehaviour {
 
 	){
 
-		print ("ClientPosition Recieved in Engine");
+//		print ("ClientPosition Recieved in Engine");
 		hasClientSent = true;
 
 		client[0]=cPos0;
@@ -41,23 +68,6 @@ public class Engine : MonoBehaviour {
 		client[2]=cPos2;
 		client[3]=cPos3;
 		client[4]=cPos4;
-//		inst.transform.SetPositionAndRotation (cPos0,cRot0);
-//		Instantiate (inst);
-//
-//		inst.transform.SetPositionAndRotation (cPos1,cRot1);
-//		Instantiate (inst);
-//
-//		inst.transform.SetPositionAndRotation (cPos2,cRot2);
-//		Instantiate (inst);
-//
-//		inst.transform.SetPositionAndRotation (cPos3,cRot3);
-//		Instantiate (inst);
-//
-//		inst.transform.SetPositionAndRotation (cPos4,cRot4);
-//		Instantiate (inst);
-//
-//		proposedBall.transform.SetPositionAndRotation (bPos, Quaternion.identity);
-//		Instantiate (proposedBall);
 	}
 
 
@@ -69,7 +79,7 @@ public class Engine : MonoBehaviour {
 		Vector3 bPos
 	){
 
-		print ("ServerPosition Recieved in Engine");
+//		print ("ServerPosition Recieved in Engine");
 		hasServerSent = true;
 
 		server[0]=cPos0;
@@ -78,20 +88,6 @@ public class Engine : MonoBehaviour {
 		server[3]=cPos3;
 		server[4]=cPos4;
 //
-//		inst.transform.SetPositionAndRotation (cPos0,cRot0);
-//		Instantiate (inst);
-//
-//		inst.transform.SetPositionAndRotation (cPos1,cRot1);
-//		Instantiate (inst);
-//
-//		inst.transform.SetPositionAndRotation (cPos2,cRot2);
-//		Instantiate (inst);
-//
-//		inst.transform.SetPositionAndRotation (cPos3,cRot3);
-//		Instantiate (inst);
-//
-//		inst.transform.SetPositionAndRotation (cPos4,cRot4);
-//		Instantiate (inst);
 	}
 
 
@@ -101,11 +97,20 @@ public class Engine : MonoBehaviour {
 		if (hasServerSent && hasClientSent && !hasEngineStarted) {
 			hasEngineStarted = true;
 
+
+
+
+
+
 			GameObject linker = GameObject.FindWithTag ("Linker");
 			linker.GetComponent<Linker>().RecieveEngineOutput(server,client);
+			hasClientSent = false;
+			hasServerSent = false;
+			hasEngineStarted = false;
 		}
 	
 	}
+
 
 
 }
