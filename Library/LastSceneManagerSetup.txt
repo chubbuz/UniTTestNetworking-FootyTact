@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Unit.unity
+- path: Assets/TraingleTest.unity
   isLoaded: 1
   isActive: 1

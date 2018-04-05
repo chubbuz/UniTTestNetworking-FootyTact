@@ -7,6 +7,7 @@ public class Engine : MonoBehaviour {
 	//for instantation
 	public GameObject inst;
 	public GameObject proposedBall;
+	public GameObject ball;
 
 	//Engine switching on and off  parameters
 	private bool hasServerSent;
@@ -19,10 +20,21 @@ public class Engine : MonoBehaviour {
 	//previous position
 	private Vector3[] serverPrev;
 	private Vector3[] clientPrev;
+	private Vector3 playerSize;
 
 	//All the information of the game
 	private Plane plane;
-	private Vector3 playerSize;
+
+
+	//ball information
+	private Vector3 newBallPos;
+	private Vector3 prevBallPos;
+	private string prevBallTeam;
+	private string currBallTeam;
+	private GameObject currBallPlayer;
+	private GameObject prevBallPlayer;
+	private float ballRadius;
+
 
 	void Start(){
 		hasEngineStarted = false;
@@ -47,7 +59,8 @@ public class Engine : MonoBehaviour {
 		GameObject ground = GameObject.Find ("Plane");
 		Vector3 groundPos = ground.transform.position;
 		plane = new Plane(Vector3.up,groundPos);
-
+		ball = GameObject.Find ("Ball");
+		ballRadius = ball.GetComponent<SphereCollider> ().radius;
 
 	}
 
@@ -68,6 +81,12 @@ public class Engine : MonoBehaviour {
 		client[2]=cPos2;
 		client[3]=cPos3;
 		client[4]=cPos4;
+
+
+		if (bPos != Vector3.back)
+			newBallPos = bPos;
+
+
 	}
 
 
@@ -87,7 +106,10 @@ public class Engine : MonoBehaviour {
 		server[2]=cPos2;
 		server[3]=cPos3;
 		server[4]=cPos4;
-//
+
+		if (bPos != Vector3.back)
+			newBallPos = bPos;
+
 	}
 
 
@@ -97,7 +119,7 @@ public class Engine : MonoBehaviour {
 		if (hasServerSent && hasClientSent && !hasEngineStarted) {
 			hasEngineStarted = true;
 
-
+			ProcessBall ();
 
 
 
@@ -111,6 +133,58 @@ public class Engine : MonoBehaviour {
 	
 	}
 
+
+	private void ProcessBall(){
+
+	
+		//check if Ball passing lane is interrupted
+//		GameObject passingArea= new GameObject();
+//		passingArea.AddComponent<BoxCollider> ();
+//		BoxCollider passArea = passingArea.GetComponent<BoxCollider> ();
+//		float length = Vector3.Distance (newBallPos, prevBallPos);
+//		float width = 2 * ballRadius + 2 * playerSize.x;
+//
+//		//midpoint
+//		float midx =(newBallPos.x+prevBallPos.x) /2;
+//		float midz = (newBallPos.z + prevBallPos.z) / 2;
+//		Vector3 midPos = new Vector3 (midx, 0, midz);
+//		passingArea.transform.SetPositionAndRotation (midPos, Quaternion.identity);
+//
+//		float angle = Vector3.Angle(newBallPos,prevBallPos);
+//		passArea.size= new Vector3 (length, 2, width);
+////		passingArea
+//		passingArea.transform.Rotate (0, angle, 0);
+//		passArea.transform.Rotate (0, angle, 0);
+//
+//
+//
+//		//Debug element
+//		BoxCollider sample =inst.GetComponent<BoxCollider> ();
+//		Vector3 sampleSize = new Vector3 (length, 2, width);
+//		sample.size = sampleSize;
+//		inst.transform.Rotate(0, angle, 0);
+//		Instantiate (inst);
+//
+//
+//		print ("ENgine delayed on BallProcessing");
+//		Invoke ("delay", 10); 
+
+		for (int i = 0; i < 10; i++) {
+				
+		}
+	
+	}
+
+	bool isInside(Vector3[] polyPoints, Vector3  p){
+		int  j = polyPoints.Length-1; 
+		bool inside = false; 
+		for (int i = 0; i < polyPoints.Length; j = i++) { 
+			if ( ((polyPoints[i].z <= p.z && p.z < polyPoints[j].z) || (polyPoints[j].z <= p.z && p.z < polyPoints[i].z)) && 
+				(p.x < (polyPoints[j].x - polyPoints[i].x) * (p.z - polyPoints[i].z) / (polyPoints[j].z - polyPoints[i].z) + polyPoints[i].z)) 
+				inside = !inside; 
+		} 
+		return inside; 
+	}
 
 
 }

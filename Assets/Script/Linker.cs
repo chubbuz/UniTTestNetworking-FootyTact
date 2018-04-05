@@ -52,7 +52,7 @@ public class Linker : NetworkBehaviour {
 	{
 		//print ("Invoking Command");
 		GameObject ball = GameObject.Find ("Ball");
-		Vector3 ballPos = Vector3.zero;
+		Vector3 ballPos = Vector3.back;
 
 
 

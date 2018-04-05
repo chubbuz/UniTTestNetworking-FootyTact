@@ -57,7 +57,11 @@
      <Compile Include="Assets\Script\Linker.cs" />
      <Compile Include="Assets\Script\PlayerBehaviour.cs" />
      <Compile Include="Assets\Script\SessionManager.cs" />
+     <Compile Include="Assets\Script\Test.cs" />
+     <Compile Include="Assets\Script\TestScripts\PolygonTester.cs" />
+     <Compile Include="Assets\Script\TestScripts\Traingulator.cs" />
      <Compile Include="Assets\Script\TimeUI.cs" />
+     <Compile Include="Assets\Script\traingle.cs" />
  <Reference Include="UnityEngine.UIAutomation">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UIAutomation/UnityEngine.UIAutomation.dll</HintPath>
  </Reference>
