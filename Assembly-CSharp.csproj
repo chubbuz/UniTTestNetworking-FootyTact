@@ -52,12 +52,13 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Script\BallBehaviour.cs" />
-     <Compile Include="Assets\Script\Engine.cs" />
+     <Compile Include="Assets\Script\Engine\BallEngine.cs" />
+     <Compile Include="Assets\Script\Engine\Engine.cs" />
+     <Compile Include="Assets\Script\Engine\Test.cs" />
      <Compile Include="Assets\Script\Execution.cs" />
      <Compile Include="Assets\Script\Linker.cs" />
      <Compile Include="Assets\Script\PlayerBehaviour.cs" />
      <Compile Include="Assets\Script\SessionManager.cs" />
-     <Compile Include="Assets\Script\Test.cs" />
      <Compile Include="Assets\Script\TestScripts\PolygonTester.cs" />
      <Compile Include="Assets\Script\TestScripts\Traingulator.cs" />
      <Compile Include="Assets\Script\TimeUI.cs" />

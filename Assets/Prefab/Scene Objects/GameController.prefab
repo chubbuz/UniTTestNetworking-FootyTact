@@ -64,7 +64,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e57c88eafcd54e789c61b778be199b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sessionTime: 15
+  sessionTime: 5
   timeUI: 
   toStartCount: 0
   oppTeam: 

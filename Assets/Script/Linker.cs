@@ -52,7 +52,12 @@ public class Linker : NetworkBehaviour {
 	{
 		//print ("Invoking Command");
 		GameObject ball = GameObject.Find ("Ball");
+		bool isbChanged = ball.GetComponent<BallBehaviour> ().hasBallmoved;
+//		if (!isbChanged)
+//			ball.GetComponent<BallBehaviour> ().attemptedPos = ball.transform.position;
 		Vector3 ballPos = Vector3.back;
+
+
 
 
 
@@ -61,8 +66,9 @@ public class Linker : NetworkBehaviour {
 				state [i]= client[i].GetComponent<PlayerBehaviour>().attemptedState;
 			}
 
-			if (!ball.GetComponent<BallBehaviour> ().isBallWithServer) {
+			if (!ball.GetComponent<BallBehaviour> ().isBallWithServer ) {
 				ballPos =ball.GetComponent<BallBehaviour> ().attemptedPos;
+//				print ("ballplayerIndex in LInker Before sending:" + ball.GetComponent<BallBehaviour> ().ballPlayerIndex);
 			}
 
 
@@ -71,7 +77,7 @@ public class Linker : NetworkBehaviour {
 				state[2].transform.position, state[2].transform.rotation,
 				state[3].transform.position, state[3].transform.rotation,
 				state[4].transform.position, state[4].transform.rotation,
-				ballPos
+				ballPos,isbChanged
 			
 			);
 		}
@@ -83,6 +89,8 @@ public class Linker : NetworkBehaviour {
 
 			if (ball.GetComponent<BallBehaviour> ().isBallWithServer) {
 				ballPos =ball.GetComponent<BallBehaviour> ().attemptedPos;
+//				print ("ballplayerIndex in LInker Before sending:" + ball.GetComponent<BallBehaviour> ().ballPlayerIndex);
+
 			}
 
 
@@ -92,7 +100,7 @@ public class Linker : NetworkBehaviour {
 				state[2].transform.position, state[2].transform.rotation,
 				state[3].transform.position, state[3].transform.rotation,
 				state[4].transform.position, state[4].transform.rotation,
-				ballPos
+				ballPos,isbChanged
 
 
 			);
@@ -110,32 +118,26 @@ public class Linker : NetworkBehaviour {
 		Vector3 x2,Quaternion y2,
 		Vector3 x3,Quaternion y3,
 		Vector3 x4,Quaternion y4,
-		Vector3 bPos
+		Vector3 bPos, bool isbChanged
 	){
-		if (isServer) {
-			//print ("Inside the ServerCommand");
-			//print (">>>>>>>>>>>Client invoked Command fucntion<<<<<<<");
-			////print ("The state of client is:" + x);
-
-		}
-
+		
 
 		GameObject Engine = GameObject.FindWithTag ("GameController");
-		Engine.GetComponent<Engine> ().ClientPosition (x0,y0,x1,y1,x2,y2,x3,y3,x4,y4,bPos);
+		Engine.GetComponent<Engine> ().ClientPosition (x0,y0,x1,y1,x2,y2,x3,y3,x4,y4,bPos,isbChanged);
 
 	}
 
 
 	//From Engine to the Linker ulitmately to the client
-	public void RecieveEngineOutput(Vector3[] serverUpdate , Vector3[] clientUpdate){
-		RpcClientEngineOutput (serverUpdate,clientUpdate);
+	public void RecieveEngineOutput(Vector3[] serverUpdate , Vector3[] clientUpdate,Vector3 bPos,int plIndex){
+		RpcClientEngineOutput (serverUpdate,clientUpdate,bPos,plIndex);
 		GameObject controller = GameObject.FindGameObjectWithTag ("GameController");
-		controller.GetComponent<Execution> ().Execute (serverUpdate,clientUpdate);
+		controller.GetComponent<Execution> ().Execute (serverUpdate,clientUpdate,bPos,plIndex);
 
 	}
 	[ClientRpc]
-	public void RpcClientEngineOutput(Vector3[] serverUpdate ,Vector3[] clientUpdate){
+	public void RpcClientEngineOutput(Vector3[] serverUpdate ,Vector3[] clientUpdate,Vector3 bPos,int plIndex){
 		GameObject controller = GameObject.FindGameObjectWithTag ("GameController");
-		controller.GetComponent<Execution> ().Execute (serverUpdate, clientUpdate);
+		controller.GetComponent<Execution> ().Execute (serverUpdate, clientUpdate,bPos,plIndex);
 	}
 }
