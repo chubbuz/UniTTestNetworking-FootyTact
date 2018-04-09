@@ -34,7 +34,7 @@ public class Test : MonoBehaviour {
 	 	//Vector3 v5 = p5.transform.position;
 	
 		checkP = testPoint.transform.position;
-		Vector3[] vertices = new[] {v1,v4,v3,v2};
+	
 
 
 
@@ -57,7 +57,7 @@ public class Test : MonoBehaviour {
 	void Traingle (Vector3 v1, Vector3 v2, Vector3 v3){
 		//init vairables
 		Mesh mesh;
-		MeshRenderer meshRenderer;
+	
 		Vector3[] vertices;
 		int[] triangles;
 

@@ -103,7 +103,7 @@ public class Engine : MonoBehaviour {
 		//bEngine.hasBallMoved = isBallMoved;
 
 		if (bPos != Vector3.back) {
-			print ("Udating ball info form Client"+bPos);
+//			print ("Udating ball info form Client"+bPos);
 			bEngine.targetBall = bPos;
 			bEngine.isBallWithServer = false;
 			bEngine.hasBallMoved = isBallMoved;
@@ -186,10 +186,16 @@ public class Engine : MonoBehaviour {
 					bEngine.targetBall = allPlayer [passedPlayerIndex];
 					int intrIndex =  bEngine.LaneInterruption (allPlayer, passedPlayerIndex);
 
-
+//					for (int i = 0; i < 4; i++) {
+//						inst.transform.name = "Vertice" + i;
+//						inst.transform.position = bEngine.passZoneVertices [i];
+//						Instantiate (inst);
+//					}
 
 					if (intrIndex > -1) {
 						bEngine.targetPlayer = intrIndex;
+						inst.transform.position = allPlayer [bEngine.targetPlayer];
+						Instantiate (inst);
 						print ("interupted by:" + intrIndex);
 					}
 					else
@@ -204,19 +210,21 @@ public class Engine : MonoBehaviour {
 					accurateBallPos = bEngine.sourceBall;//this should be to the opponent later
 				}
 			} else {
-				//Debug.Log ("BallHasn't MOved");
+				Debug.Log ("No pass attempted");
 				accurateBallPos = bEngine.targetBall;
 				bEngine.targetPlayer = passedPlayerIndex;
 
 			}
 
 			bEngine.sourcePlayer=bEngine.targetPlayer;
-			bEngine.sourceBall = bEngine.targetBall;
+			bEngine.sourceBall = accurateBallPos;
 
 
 
 
 
+
+			//print ("accurateBallPos sent from ENigne =" + accurateBallPos);
 
 
 			GameObject linker = GameObject.FindWithTag ("Linker");

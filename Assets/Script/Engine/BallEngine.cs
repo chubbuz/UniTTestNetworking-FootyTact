@@ -72,10 +72,10 @@ public class BallEngine {
 
 
 		//Debug.Log ("Checking for interruption");
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < 10; i++) {
 			if (isInside (players [i])) {
 				if (i != targetPlayer && i != sourcePlayer) {
-//					Debug.Log ("Probable interruption on passing lane by:" + i);
+					Debug.Log ("Probable interruption on passing lane by:" + i);
 					isInterrupted = true;
 					intPlayers [intCount++] = i;
 				}
