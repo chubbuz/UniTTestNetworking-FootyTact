@@ -51,18 +51,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Script\BallBehaviour.cs" />
      <Compile Include="Assets\Script\Engine\BallEngine.cs" />
      <Compile Include="Assets\Script\Engine\Engine.cs" />
      <Compile Include="Assets\Script\Engine\Test.cs" />
-     <Compile Include="Assets\Script\Execution.cs" />
-     <Compile Include="Assets\Script\Linker.cs" />
-     <Compile Include="Assets\Script\PlayerBehaviour.cs" />
-     <Compile Include="Assets\Script\SessionManager.cs" />
+     <Compile Include="Assets\Script\Execution\Execution.cs" />
+     <Compile Include="Assets\Script\Network\Linker.cs" />
+     <Compile Include="Assets\Script\Tactical\BallBehaviour.cs" />
+     <Compile Include="Assets\Script\Tactical\EngineUI.cs" />
+     <Compile Include="Assets\Script\Tactical\MessageUI.cs" />
+     <Compile Include="Assets\Script\Tactical\PlayerBehaviour.cs" />
+     <Compile Include="Assets\Script\Tactical\SessionManager.cs" />
+     <Compile Include="Assets\Script\Tactical\TimeUI.cs" />
      <Compile Include="Assets\Script\TestScripts\PolygonTester.cs" />
+     <Compile Include="Assets\Script\TestScripts\traingle.cs" />
      <Compile Include="Assets\Script\TestScripts\Traingulator.cs" />
-     <Compile Include="Assets\Script\TimeUI.cs" />
-     <Compile Include="Assets\Script\traingle.cs" />
  <Reference Include="UnityEngine.UIAutomation">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UIAutomation/UnityEngine.UIAutomation.dll</HintPath>
  </Reference>

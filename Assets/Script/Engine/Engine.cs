@@ -31,6 +31,8 @@ public class Engine : MonoBehaviour {
 	private float groundPlane;
 //	private
 
+	private GameObject messageUI;
+
 
 
 
@@ -74,6 +76,9 @@ public class Engine : MonoBehaviour {
 		bEngine.sourcePlayer = 0;
 		bEngine.UpdateInfo ();
 
+
+
+		messageUI = GameObject.Find ("EngineMessage");
 
 		//bEngine.near=playerSize.x+
 
@@ -197,20 +202,27 @@ public class Engine : MonoBehaviour {
 						inst.transform.position = allPlayer [bEngine.targetPlayer];
 						Instantiate (inst);
 						print ("interupted by:" + intrIndex);
-					}
-					else
+						messageUI.GetComponent<EngineUI> ().Display ("interupted by:" + intrIndex);
+
+					} else {
 						print ("No interruption on Pass");
-					
+						messageUI.GetComponent<EngineUI> ().Display ("No interruption on pass");
+
+					}
 					accurateBallPos = bEngine.LocateBall (allPlayer);
 //					print("Accurate Ball just sent from BallENgine:"+accurateBallPos);
 				} else {
-					print ("Engine Message: You have mispassed the ball");
+					print ("The ball is misspassed");
+					messageUI.GetComponent<EngineUI> ().Display ("The ball is MissPassed");
+
 					bEngine.targetPlayer = bEngine.sourcePlayer;
 					//print("passedPlayerIndex  just after misspassing="
 					accurateBallPos = bEngine.sourceBall;//this should be to the opponent later
 				}
 			} else {
 				Debug.Log ("No pass attempted");
+				messageUI.GetComponent<EngineUI> ().Display ("NO pass is attempted");
+
 				accurateBallPos = bEngine.targetBall;
 				bEngine.targetPlayer = passedPlayerIndex;
 

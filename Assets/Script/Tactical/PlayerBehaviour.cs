@@ -11,7 +11,7 @@ public class PlayerBehaviour : MonoBehaviour {
 	private GameObject ball;
 	public float  initialYPos;
 	public float initialBallYpos;
-
+	public bool amIServer;
 	public bool isMovementAllowed;
 	public Transform State;
 	public Transform attemptedState;
@@ -19,6 +19,8 @@ public class PlayerBehaviour : MonoBehaviour {
 	public bool hasBall;
 	public Material material,ballMaterial;
 	public LineRenderer line;
+	private GameObject messageUI;
+
 
 	void Start(){
 
@@ -48,6 +50,8 @@ public class PlayerBehaviour : MonoBehaviour {
 		line.SetPosition(1,this.transform.position);
 
 
+		messageUI = GameObject.Find ("Message");
+
 	}
 
 
@@ -55,7 +59,7 @@ public class PlayerBehaviour : MonoBehaviour {
 
 		if (isMovementAllowed) {
 			
-			Ray ray=Camera.main.ScreenPointToRay(Input.mousePosition);
+			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 			float distance;
 			if (plane.Raycast (ray, out distance)) {
 				Vector3 cursorPosition = ray.GetPoint (distance);
@@ -63,38 +67,43 @@ public class PlayerBehaviour : MonoBehaviour {
 				line.endWidth = 0.1f;
 
 				if (this.hasBall) {
-					Vector3 correctPos = new Vector3 (cursorPosition.x,initialBallYpos,cursorPosition.z);
+					Vector3 correctPos = new Vector3 (cursorPosition.x, initialBallYpos, cursorPosition.z);
 					ball.GetComponent<BallBehaviour> ().attemptedPos = correctPos;
 					ball.GetComponent<BallBehaviour> ().hasBallmoved = true;
 
 					//line.material = new Material (material);
-					line.SetPosition(0,this.transform.position);
+					line.SetPosition (0, this.transform.position);
 //					sline.SetColors (Color.white, Color.white);
 
-					line.SetPosition(1, cursorPosition);
+					line.SetPosition (1, cursorPosition);
 					//line.SetWidth (0.5f, 0.1f);
 
 //					print (this.transform.name + "has ball");
 //					print ("passing ball by :"+this.transform.name );
-					line.startColor=Color.white;
+					line.startColor = Color.white;
 					line.endColor = Color.black;
+
+					messageUI.GetComponent<MessageUI> ().Display ("Could be a great Pass");
+
 
 
 //					
 
 
 				} else {
-					Vector3 correctPos = new Vector3 (cursorPosition.x,initialYPos,cursorPosition.z);
+					Vector3 correctPos = new Vector3 (cursorPosition.x, initialYPos, cursorPosition.z);
 					attemptedState.position = correctPos;
 					State = this.transform;
 
 
-					line.SetPosition(0,this.transform.position);
+					line.SetPosition (0, this.transform.position);
 //					line.SetColors (Color.green, Color.green);
-					line.SetPosition(1, cursorPosition);//end
+					line.SetPosition (1, cursorPosition);//end
 
-					line.startColor=Color.yellow;
+					line.startColor = Color.yellow;
 					line.endColor = Color.blue;
+
+					messageUI.GetComponent<MessageUI> ().Display ("This moves looks a real danger");
 
 	
 //					print ("moving:"+this.transform.name );
@@ -103,10 +112,14 @@ public class PlayerBehaviour : MonoBehaviour {
 
 			}
 
-		} 
+		} else {
+			messageUI.GetComponent<MessageUI> ().Display ("Hey!! you can't move this player");
 	}
 
 
 
 }
- 
+
+
+
+}

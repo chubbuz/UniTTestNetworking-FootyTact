@@ -38,7 +38,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1464231417578672}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.61, y: 0, z: -0.05}
+  m_LocalPosition: {x: -6.57, y: 0, z: 2.66}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -98,12 +98,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialYPos: 0
   initialBallYpos: 0
+  amIServer: 0
   isMovementAllowed: 0
   State: {fileID: 0}
   attemptedState: {fileID: 0}
   hasBall: 0
   material: {fileID: 2100000, guid: 2f33a554cf4c546e8a32b509dfcdb9c4, type: 2}
   ballMaterial: {fileID: 2100000, guid: eadabda28f4ce42de94380c5678623c9, type: 2}
+  line: {fileID: 0}
 --- !u!120 &120501278088720744
 LineRenderer:
   m_ObjectHideFlags: 1
@@ -150,7 +152,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 2
         time: 0
-        value: 0
+        value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 0

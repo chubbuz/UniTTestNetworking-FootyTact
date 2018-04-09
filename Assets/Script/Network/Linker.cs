@@ -28,12 +28,24 @@ public class Linker : NetworkBehaviour {
 			server [i] = GameObject.Find ("ServerPlayer" + i);
 			client [i] = GameObject.Find ("ClientPlayer" + i);
 
+			GameObject eMessage = GameObject.Find ("EngineMessage");
+			GameObject pMessage = GameObject.Find ("Message");
+
 			if (isServer) {
 				//Server Sever Server
 				client [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
 				server [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = true;
 				controller.GetComponent<SessionManager> ().oppTeam = "ClientPlayer";
 				controller.GetComponent<SessionManager> ().amIServer = true;
+
+
+				//UI
+
+				eMessage.GetComponent<EngineUI> ().Display ("Online");
+				pMessage.GetComponent<MessageUI> ().Message.color = Color.yellow;
+				pMessage.GetComponent<MessageUI> ().Display ("you are YELLOW. Good Luck");
+
+
 
 			} else {
 				//Client Client Client
@@ -42,6 +54,10 @@ public class Linker : NetworkBehaviour {
 				server [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
 				controller.GetComponent<SessionManager> ().oppTeam = "ServerPlayer";
 				controller.GetComponent<SessionManager> ().amIServer = false;
+				//UI
+				eMessage.GetComponent<EngineUI> ().Display ("Offline");
+				pMessage.GetComponent<MessageUI> ().Message.color = Color.blue;
+				pMessage.GetComponent<MessageUI> ().Display ("you are BLUE. Good Luck");
 
 			}
 		}
