@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 
 public class BallEngine {
@@ -18,10 +17,16 @@ public class BallEngine {
 	public int targetPlayer;
 	public int sourcePlayer;
 	public bool hasBallMoved;
-
-
+	private bool isLeftPostServer;
+	private bool isTargetPostServer;
 	public Vector3[] passZoneVertices;
 
+
+	public int clientScore;
+	public int serverScore;
+	public Vector3  testBall;
+
+	public int interruptIndex;
 	public void UpdateInfo(){
 		GameObject ball = GameObject.Find ("Ball");
 		sourceBall = ball.transform.position;
@@ -58,6 +63,122 @@ public class BallEngine {
 		return index;
 	}
 
+	public bool HasShoot (float pLeft, float pRight){
+		bool hasShoot = false;
+
+		if (targetBall.x <= pLeft || targetBall.x >= pRight)
+			hasShoot = true;
+
+
+
+		return  hasShoot;
+	}
+
+	public int GoalStatus(Vector3[] postL, Vector3[] postR,Vector3[] players){
+		int status = 0;
+		isLeftPostServer = true;
+		isTargetPostServer = true;
+		Vector3 shotBall = this.targetBall;
+	
+		int intrIndex =ShotInterruption(players, shotBall);
+
+		interruptIndex = -1;
+		if(intrIndex>-1){
+			interruptIndex = intrIndex;
+			status = 1;
+			return status;
+		}
+
+//		Debug.Log ("GoalStatus method called");
+		if (targetBall.x >= postR [0].x) {
+			//Client Post
+			isTargetPostServer = false;
+			shotBall.x = postR [0].x;
+			shotBall.z = targetBall.z / targetBall.x * shotBall.x;
+
+			testBall = shotBall;
+
+			if (isInsidePost (postR, shotBall)) {
+				serverScore++;
+				return 0;		
+			} 
+
+		} else {
+			Debug.Log ("ball is shot to LeftPost");
+
+			//ServerPost home
+			shotBall.x = postL [0].x;
+
+			shotBall.z = targetBall.z / targetBall.x * shotBall.x;
+			testBall = shotBall;
+
+
+			if (isInsidePost (postL, shotBall)) {
+				clientScore++;
+				return 0;
+			} 
+		}
+
+		return -1;
+
+
+	}
+
+	private int ShotInterruption (Vector3[] players ,Vector3 shotBall ){
+		InitPassZone (shotBall);
+
+		int[] intPlayers=new int[10] ;
+		int intCount=0;
+		int index = -1;
+		bool isInterrupted=false;
+
+		for (int i = 0; i < 10; i++) {
+			if (isInside (players [i])) {
+				if (i != sourcePlayer) {
+						Debug.Log ("Probable SAVE on shooting lane by:" + i);
+					isInterrupted = true;
+					intPlayers [intCount++] = i;
+				}
+			
+			}
+		}
+
+		if (isInterrupted) {
+			float minDis = 99999;//Vector3.Distance (sourceBall, players [intPlayers [0]]);
+			for (int i = 0; i < intCount; i++) {
+
+				float tempDis = Vector3.Distance (sourceBall, players [intPlayers [i]]);
+				//	Debug.Log ("distance to interruption no:" + tempDis);
+				if (tempDis < minDis) {
+					minDis = tempDis;
+					index = intPlayers [i];
+				}
+
+			}
+		} else {
+			return -1;
+		}
+
+		
+		return index;
+
+		}
+
+
+
+	private bool isInsidePost(Vector3 [] post,Vector3 shotBall){
+		int  j = post.Length-1; 
+		bool inside = false; 
+		Vector3 p = shotBall;
+
+		for (int i = 0; i < post.Length; j = i++) { 
+			if ( ((post[i].z <= p.z && p.z < post[j].z) || (post[j].z <= p.z && p.z < post[i].z)) && 
+				(p.y < (post[j].y - post[i].y) * (p.z - post[i].z) / (post[j].z - post[i].z) + post[i].y)) 
+				inside = !inside; 
+		}
+
+		return inside;
+	}
 
 	public int LaneInterruption(Vector3[] players,int targetIndex){
 		int[] intPlayers=new int[10] ;
@@ -119,6 +240,8 @@ public class BallEngine {
 
 		return new Vector3 (xBall, 0, zBall);
 	}
+
+
 
 
 	private bool isInside(Vector3  p){

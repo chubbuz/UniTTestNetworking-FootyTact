@@ -7,7 +7,7 @@ public class Engine : MonoBehaviour {
 	//for instantation
 	public GameObject inst;
 	public GameObject proposedBall;
-	public GameObject ball;
+	public GameObject inst1;
 
 	//Engine switching on and off  parameters
 	private bool hasServerSent;
@@ -32,6 +32,10 @@ public class Engine : MonoBehaviour {
 //	private
 
 	private GameObject messageUI;
+
+	public Vector3[] postVerticesLeft;
+	public Vector3[] postVerticesRight;
+	public int[] score;
 
 
 
@@ -80,7 +84,21 @@ public class Engine : MonoBehaviour {
 
 		messageUI = GameObject.Find ("EngineMessage");
 
-		//bEngine.near=playerSize.x+
+		postVerticesRight = new Vector3[4];
+		postVerticesLeft = new Vector3[4];
+
+		for (int i = 0; i < 4; i++) {
+			GameObject pointRight= GameObject.Find ("p1" + i);
+			GameObject pointLeft = GameObject.Find ("p0" + i);
+
+			postVerticesRight [i] = pointRight.transform.position;
+			postVerticesLeft [i] = pointLeft.transform.position;
+		}
+		score = new int[2];
+		score [0] =0;
+		score [1] = 0;
+		bEngine.clientScore = 0;
+		bEngine.serverScore = 0;
 
 	}
 
@@ -170,17 +188,11 @@ public class Engine : MonoBehaviour {
 		if (hasServerSent && hasClientSent && !hasEngineStarted) {
 			hasEngineStarted = true;
 
-
-		//	print ("bEngine.targetPlayer" + bEngine.targetPlayer);
-//				print ("bEngine.targetBall" + bEngine.targetBall);
-			proposedBall.transform.position = bEngine.targetBall;
-
-
 			//ballProcessing
-			Vector3 accurateBallPos;
-
-
+			Vector3 accurateBallPos = Vector3.back;
 			int passedPlayerIndex=bEngine.sourcePlayer;
+
+
 
 
 			if (bEngine.hasBallMoved ) {
@@ -191,16 +203,9 @@ public class Engine : MonoBehaviour {
 					bEngine.targetBall = allPlayer [passedPlayerIndex];
 					int intrIndex =  bEngine.LaneInterruption (allPlayer, passedPlayerIndex);
 
-//					for (int i = 0; i < 4; i++) {
-//						inst.transform.name = "Vertice" + i;
-//						inst.transform.position = bEngine.passZoneVertices [i];
-//						Instantiate (inst);
-//					}
 
 					if (intrIndex > -1) {
 						bEngine.targetPlayer = intrIndex;
-						inst.transform.position = allPlayer [bEngine.targetPlayer];
-						Instantiate (inst);
 						print ("interupted by:" + intrIndex);
 						messageUI.GetComponent<EngineUI> ().Display ("interupted by:" + intrIndex);
 
@@ -212,12 +217,65 @@ public class Engine : MonoBehaviour {
 					accurateBallPos = bEngine.LocateBall (allPlayer);
 //					print("Accurate Ball just sent from BallENgine:"+accurateBallPos);
 				} else {
+
+					if (bEngine.HasShoot (postVerticesLeft[0].x,postVerticesRight[0].x)) {
+						messageUI.GetComponent<EngineUI> ().Display ("a power shot for Goal");
+
+						
+
+						int status = bEngine.GoalStatus (postVerticesLeft, postVerticesRight,allPlayer);
+						inst.transform.position = bEngine.testBall;
+						Instantiate (inst);
+//						for (int i = 0; i < 4; i++) {
+//							inst1.transform.position = bEngine.passZoneVertices [i];
+//
+//							Instantiate (inst1);
+//						}
+
+						if (status == 0) {
+							//Goal Scored
+							score[0]= bEngine.serverScore;
+							score[1]= bEngine.clientScore;
+
+
+
+							messageUI.GetComponent<EngineUI> ().Display ("!!!Goal!!!");
+							bEngine.targetPlayer = bEngine.sourcePlayer;
+							accurateBallPos = bEngine.sourceBall;
+
+							//reset all player position
+						}else if(status == 1){
+							//Goal saved or interrupted
+							bEngine.targetPlayer = bEngine.interruptIndex;
+
+
+							accurateBallPos = bEngine.LocateBall (allPlayer);
+							messageUI.GetComponent<EngineUI> ().Display ("Worldclass  Save by Opponent:"+bEngine.interruptIndex);
+
+						}else{
+							//Shot not on target
+							bEngine.targetPlayer = bEngine.sourcePlayer;
+							accurateBallPos = bEngine.sourceBall;
+							messageUI.GetComponent<EngineUI> ().Display ("Out of Target! Shoot again");
+						}
+
+
+
+
+						//bEngine.targetPlayer = bEngine.sourcePlayer;
+
+
+
+
+					}else{
+
 					print ("The ball is misspassed");
 					messageUI.GetComponent<EngineUI> ().Display ("The ball is MissPassed");
 
 					bEngine.targetPlayer = bEngine.sourcePlayer;
 					//print("passedPlayerIndex  just after misspassing="
 					accurateBallPos = bEngine.sourceBall;//this should be to the opponent later
+					}
 				}
 			} else {
 				Debug.Log ("No pass attempted");
@@ -233,14 +291,11 @@ public class Engine : MonoBehaviour {
 
 
 
-
-
-
-			//print ("accurateBallPos sent from ENigne =" + accurateBallPos);
+		//print ("accurateBallPos sent from ENigne =" + accurateBallPos);
 
 
 			GameObject linker = GameObject.FindWithTag ("Linker");
-			linker.GetComponent<Linker>().RecieveEngineOutput(server,client,accurateBallPos,bEngine.targetPlayer);
+			linker.GetComponent<Linker>().RecieveEngineOutput(server,client,accurateBallPos,bEngine.targetPlayer,score);
 //			print ("accurateBallPos sent from ENigne =" + accurateBallPos);
 			bEngine.targetPlayer = -1;
 			bEngine.targetBall =  new Vector3();

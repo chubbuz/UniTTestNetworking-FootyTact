@@ -53,6 +53,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69a53d9df27fb4552be35e56fc8dba52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ballPlayerIndexPrev: 0
+  amIServer: 1
 --- !u!114 &114503872639820674
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -65,10 +67,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sessionTime: 5
-  timeUI: 
+  timeUI: Session:2Ended
   toStartCount: 0
-  oppTeam: 
-  amIServer: 0
+  oppTeam: ClientPlayer
+  amIServer: 1
   timeRem: {fileID: 0}
 --- !u!114 &114651652525267480
 MonoBehaviour:
@@ -81,7 +83,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f0644d76be904eafb121bdcbd3f68b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inst: {fileID: 1279945436677842, guid: 249cfcf60bd9f4f6488efdf999345e75, type: 2}
-  proposedBall: {fileID: 1761965918519986, guid: f100f0801c3994988bff185902fbc656,
-    type: 2}
-  ball: {fileID: 0}
+  inst: {fileID: 1010651365085114, guid: e696387c44a8b4bd3bf910bd9698671b, type: 2}
+  proposedBall: {fileID: 0}
+  inst1: {fileID: 1056558458732944, guid: a4901c4c1f52e41b2b83a0427a9e65ac, type: 2}
+  postVerticesLeft:
+  - {x: -16.853277, y: 1.6100003, z: -3.7000263}
+  - {x: -16.853277, y: 1.6100003, z: 0.6477272}
+  - {x: -16.853277, y: -0.96999997, z: 0.6477272}
+  - {x: -16.853277, y: -0.9800001, z: -3.8922737}
+  postVerticesRight:
+  - {x: 18.324924, y: 1.5600005, z: -3.887531}
+  - {x: 18.324924, y: 1.6100003, z: 0.65247077}
+  - {x: 18.324924, y: -0.96999997, z: 0.65247077}
+  - {x: 18.324924, y: -0.9800001, z: -3.88753}
+  score: 0000000000000000

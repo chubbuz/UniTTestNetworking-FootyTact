@@ -10,7 +10,8 @@ public class Execution :MonoBehaviour {
 	private GameObject ball;
 	private bool isBallWithServer;
 	public int ballPlayerIndexPrev;
-
+	private int[] scorePrev;
+	public bool amIServer;
 
 	void Start(){
 		server = new GameObject[5];
@@ -24,10 +25,11 @@ public class Execution :MonoBehaviour {
 
 		}
 		isBallWithServer = false;
+		scorePrev = new int[2];
 	}
 
 
-	public void Execute(Vector3[] sPos,Vector3[] cPos,Vector3 bPos,int plIndex)
+	public void Execute(Vector3[] sPos,Vector3[] cPos,Vector3 bPos,int plIndex,int[] score)
 	{
 		//update the new position of ball and player
 		for (int i = 0; i < 5; i++) {
@@ -39,6 +41,15 @@ public class Execution :MonoBehaviour {
 
 		ball.GetComponent<BallBehaviour> ().ballPlayerIndex = plIndex;
 
+
+		//score
+		if (amIServer) {
+			GameObject scoreUI = GameObject.Find ("ScoreBoard");
+			scoreUI.GetComponent<ScoreUI> ().score.text = "[you] :  "+score[0] +"-" +score[1]+"   : [friend]";
+		} else {
+			GameObject scoreUI = GameObject.Find ("ScoreBoard");
+			scoreUI.GetComponent<ScoreUI> ().score.text = "[you] :  "+score[1] +"-" +score[0]+"   : [friend]";
+		}
 //		print ("PlayeIndex on Execution:"+plIndex);
 
 

@@ -37,6 +37,7 @@ public class Linker : NetworkBehaviour {
 				server [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = true;
 				controller.GetComponent<SessionManager> ().oppTeam = "ClientPlayer";
 				controller.GetComponent<SessionManager> ().amIServer = true;
+				controller.GetComponent<Execution> ().amIServer = true;
 
 
 				//UI
@@ -54,6 +55,8 @@ public class Linker : NetworkBehaviour {
 				server [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
 				controller.GetComponent<SessionManager> ().oppTeam = "ServerPlayer";
 				controller.GetComponent<SessionManager> ().amIServer = false;
+				controller.GetComponent<Execution> ().amIServer = false;
+
 				//UI
 				eMessage.GetComponent<EngineUI> ().Display ("Offline");
 				pMessage.GetComponent<MessageUI> ().Message.color = Color.blue;
@@ -145,15 +148,15 @@ public class Linker : NetworkBehaviour {
 
 
 	//From Engine to the Linker ulitmately to the client
-	public void RecieveEngineOutput(Vector3[] serverUpdate , Vector3[] clientUpdate,Vector3 bPos,int plIndex){
-		RpcClientEngineOutput (serverUpdate,clientUpdate,bPos,plIndex);
+	public void RecieveEngineOutput(Vector3[] serverUpdate , Vector3[] clientUpdate,Vector3 bPos,int plIndex,int[] score){
+		RpcClientEngineOutput (serverUpdate,clientUpdate,bPos,plIndex,score);
 		GameObject controller = GameObject.FindGameObjectWithTag ("GameController");
-		controller.GetComponent<Execution> ().Execute (serverUpdate,clientUpdate,bPos,plIndex);
+		controller.GetComponent<Execution> ().Execute (serverUpdate,clientUpdate,bPos,plIndex,score);
 
 	}
 	[ClientRpc]
-	public void RpcClientEngineOutput(Vector3[] serverUpdate ,Vector3[] clientUpdate,Vector3 bPos,int plIndex){
+	public void RpcClientEngineOutput(Vector3[] serverUpdate ,Vector3[] clientUpdate,Vector3 bPos,int plIndex, int[] score){
 		GameObject controller = GameObject.FindGameObjectWithTag ("GameController");
-		controller.GetComponent<Execution> ().Execute (serverUpdate, clientUpdate,bPos,plIndex);
+		controller.GetComponent<Execution> ().Execute (serverUpdate, clientUpdate,bPos,plIndex,score);
 	}
 }
