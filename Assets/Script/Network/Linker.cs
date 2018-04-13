@@ -12,12 +12,16 @@ public class Linker : NetworkBehaviour {
 	private GameObject[] client;
 	private Transform[] state;
 
+	//public GameObject inst;
+
 
 	void Start () {
 //		print ("linker started");
 		GameObject controller = GameObject.FindGameObjectWithTag ("GameController");
 		controller.GetComponent<SessionManager> ().toStartCount = true;
 
+
+//		inst = GameObject.Find ("Inst");
 		//enabling respective player controls
 		server = new GameObject[5];
 		client = new GameObject[5];
@@ -38,7 +42,7 @@ public class Linker : NetworkBehaviour {
 				controller.GetComponent<SessionManager> ().oppTeam = "ClientPlayer";
 				controller.GetComponent<SessionManager> ().amIServer = true;
 				controller.GetComponent<Execution> ().amIServer = true;
-
+				controller.GetComponent<Engine> ().enabled = true;
 
 				//UI
 
@@ -102,8 +106,10 @@ public class Linker : NetworkBehaviour {
 		}
 		else {
 			//Server to ServerEngine
+
 			for (int i = 0; i < 5; i++) {
 				state [i] = server[i].GetComponent<PlayerBehaviour>().attemptedState;
+
 			}
 
 			if (ball.GetComponent<BallBehaviour> ().isBallWithServer) {

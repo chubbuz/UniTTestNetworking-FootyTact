@@ -14,15 +14,22 @@ public class Engine : MonoBehaviour {
 	private bool hasClientSent;
 	private bool hasEngineStarted;
 
+
 	//proposed tactics info
 	private Vector3[] server;
 	private Vector3[] client;
 	private Vector3[] allPlayer;
+	private Vector3[] serverStart;
+	private Vector3[] clientStart;
+
 	//previous position
 	private Vector3[] serverPrev;
 	private Vector3[] clientPrev;
 	private Vector3 playerSize;
 	private Vector3[] allPlayerPrev;
+	public Vector3 startBallServer;
+	public Vector3 startBallClient;
+
 
 
 	//private int ballPlayerIndex;
@@ -37,7 +44,8 @@ public class Engine : MonoBehaviour {
 	public Vector3[] postVerticesRight;
 	public int[] score;
 
-
+	//engine flags
+	private  bool wasLastGoal;
 
 
 
@@ -45,10 +53,13 @@ public class Engine : MonoBehaviour {
 	private BallEngine bEngine;
 	void Start(){
 		hasEngineStarted = false;
+		wasLastGoal = false;
 
 		//init new Position array
 		server = new Vector3[5];
 		client = new Vector3[5];
+		serverStart = new Vector3[5];
+		clientStart = new Vector3[5];
 
 		//init sarting pos of players
 		serverPrev = new Vector3[5];
@@ -60,6 +71,9 @@ public class Engine : MonoBehaviour {
 			serverPrev[i] = GameObject.Find ("ServerPlayer" + i).transform.position;
 			clientPrev [i] = GameObject.Find ("ClientPlayer"+i).transform.position;
 
+			serverStart[i] = GameObject.Find ("ServerPlayer" + i).transform.position;
+			clientStart[i] = GameObject.Find ("ClientPlayer"+i).transform.position;
+
 			allPlayerPrev [i] = serverPrev [i];
 			allPlayerPrev [i + 5] = clientPrev [i];
 		}
@@ -70,7 +84,7 @@ public class Engine : MonoBehaviour {
 
 
 		//init ground plane
-		GameObject ground = GameObject.Find ("Plane");
+		GameObject ground = GameObject.Find ("Grass");
 		Vector3 groundPos = ground.transform.position;
 		groundPlane = 0;//groundPos.y;
 		plane = new Plane(Vector3.up,groundPos);
@@ -99,6 +113,15 @@ public class Engine : MonoBehaviour {
 		score [1] = 0;
 		bEngine.clientScore = 0;
 		bEngine.serverScore = 0;
+
+
+		//initalize start pos for ball after each team scoring
+		GameObject startClientBall = GameObject.Find ("ClientStartBall");
+		startBallClient = startClientBall.transform.position;
+
+		GameObject startServerBall = GameObject.Find ("ServerStartBall");
+		startBallServer =startServerBall.transform.position;
+
 
 	}
 
@@ -137,6 +160,11 @@ public class Engine : MonoBehaviour {
 		for (int i = 0; i < 5; i++) {
 			allPlayer [i + 5] = client [i];
 
+//			if (wasLastGoal) {
+//				inst.transform.position = allPlayer [i+5];
+//				Instantiate (inst);
+//			}
+
 		}
 
 	}
@@ -173,6 +201,12 @@ public class Engine : MonoBehaviour {
 		for (int i = 0; i < 5; i++) {
 			server [i].y = -groundPlane;
 			allPlayer [i] = server [i];
+
+
+			if (wasLastGoal) {
+				inst.transform.position = allPlayer [i];
+				Instantiate (inst);
+			}
 
 
 		}
@@ -225,7 +259,7 @@ public class Engine : MonoBehaviour {
 
 						int status = bEngine.GoalStatus (postVerticesLeft, postVerticesRight,allPlayer);
 						inst.transform.position = bEngine.testBall;
-						Instantiate (inst);
+
 //						for (int i = 0; i < 4; i++) {
 //							inst1.transform.position = bEngine.passZoneVertices [i];
 //
@@ -237,16 +271,34 @@ public class Engine : MonoBehaviour {
 							score[0]= bEngine.serverScore;
 							score[1]= bEngine.clientScore;
 
+							//set the starting formation
+							for (int i = 0; i < 5; i++) {
+								server[i] = serverStart[i];
+								client[i] = clientStart[i];
+								wasLastGoal = true;
+							}
+							if (bEngine.hasServerScored) {
+								//give ball to Clinet
+								bEngine.targetPlayer = 5;
+								accurateBallPos = startBallClient;
+								wasLastGoal = true;
 
 
+							} else {
+								//start ball with Server
+								bEngine.targetPlayer = 0;
+								accurateBallPos = startBallServer;
+
+
+							}
 							messageUI.GetComponent<EngineUI> ().Display ("!!!Goal!!!");
-							bEngine.targetPlayer = bEngine.sourcePlayer;
-							accurateBallPos = bEngine.sourceBall;
+
 
 							//reset all player position
 						}else if(status == 1){
 							//Goal saved or interrupted
 							bEngine.targetPlayer = bEngine.interruptIndex;
+							wasLastGoal = false;
 
 
 							accurateBallPos = bEngine.LocateBall (allPlayer);
@@ -257,6 +309,7 @@ public class Engine : MonoBehaviour {
 							bEngine.targetPlayer = bEngine.sourcePlayer;
 							accurateBallPos = bEngine.sourceBall;
 							messageUI.GetComponent<EngineUI> ().Display ("Out of Target! Shoot again");
+							wasLastGoal = false;
 						}
 
 
@@ -286,17 +339,15 @@ public class Engine : MonoBehaviour {
 
 			}
 
+
+
+
+			//adjust values for next EngineProcess
 			bEngine.sourcePlayer=bEngine.targetPlayer;
 			bEngine.sourceBall = accurateBallPos;
 
-
-
-		//print ("accurateBallPos sent from ENigne =" + accurateBallPos);
-
-
 			GameObject linker = GameObject.FindWithTag ("Linker");
 			linker.GetComponent<Linker>().RecieveEngineOutput(server,client,accurateBallPos,bEngine.targetPlayer,score);
-//			print ("accurateBallPos sent from ENigne =" + accurateBallPos);
 			bEngine.targetPlayer = -1;
 			bEngine.targetBall =  new Vector3();
 

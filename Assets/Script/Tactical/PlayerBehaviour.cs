@@ -13,7 +13,7 @@ public class PlayerBehaviour : MonoBehaviour {
 	public float initialBallYpos;
 	public bool amIServer;
 	public bool isMovementAllowed;
-	public Transform State;
+	//public Transform State;
 	public Transform attemptedState;
 	public Plane plane;
 	public bool hasBall;
@@ -29,15 +29,15 @@ public class PlayerBehaviour : MonoBehaviour {
 			hasBall = true;
 			//			print ("ServerPlayer0 start Run i.e hasBall=false");
 		}
-		State = this.transform;
-		initialYPos = State.position.y;
+		//State = this.transform;
+		//initialYPos = State.position.y;
 		isMovementAllowed = false;
 		attemptedState = new GameObject ("attemptedState").transform;
 		//		attemptedState = GameObject.Find ("EmptyTransform").transform;
 		attemptedState.position = this.transform.position;
 		//
 
-		GameObject ground = GameObject.Find ("Plane");
+		GameObject ground = GameObject.Find ("Grass");
 		Vector3 groundPos = ground.transform.position;
 		plane = new Plane(Vector3.up,groundPos);
 		ball = GameObject.Find ("Ball");
@@ -93,7 +93,7 @@ public class PlayerBehaviour : MonoBehaviour {
 				} else {
 					Vector3 correctPos = new Vector3 (cursorPosition.x, initialYPos, cursorPosition.z);
 					attemptedState.position = correctPos;
-					State = this.transform;
+					//State = this.transform;
 
 
 					line.SetPosition (0, this.transform.position);

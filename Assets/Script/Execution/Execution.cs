@@ -34,7 +34,10 @@ public class Execution :MonoBehaviour {
 		//update the new position of ball and player
 		for (int i = 0; i < 5; i++) {
 			client[i].transform.position=cPos[i];
+			client [i].GetComponent<PlayerBehaviour> ().attemptedState.transform.position = cPos [i];
 			server[i].transform.position=sPos[i];
+			server [i].GetComponent<PlayerBehaviour> ().attemptedState.transform.position = sPos [i];
+
 		}
 		ball.transform.position = bPos;
 		ball.GetComponent<BallBehaviour> ().ballPlayerIndexPrev = ball.GetComponent<BallBehaviour> ().ballPlayerIndex;

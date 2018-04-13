@@ -8,17 +8,22 @@ public class BallEngine {
 	//ball information
 	public Vector3 targetBall;
 	public Vector3 sourceBall;
-	public Vector3 proposedBall;
+
+
 
 	public float near;
 	private GameObject ball;
 
+
+	//flags 
 	public bool isBallWithServer;
-	public int targetPlayer;
-	public int sourcePlayer;
 	public bool hasBallMoved;
 	private bool isLeftPostServer;
 	private bool isTargetPostServer;
+	public bool hasServerScored;
+
+	public int targetPlayer;
+	public int sourcePlayer;
 	public Vector3[] passZoneVertices;
 
 
@@ -30,6 +35,10 @@ public class BallEngine {
 	public void UpdateInfo(){
 		GameObject ball = GameObject.Find ("Ball");
 		sourceBall = ball.transform.position;
+
+
+
+
 	}
 
 
@@ -100,6 +109,7 @@ public class BallEngine {
 
 			if (isInsidePost (postR, shotBall)) {
 				serverScore++;
+				hasServerScored = true;
 				return 0;		
 			} 
 
@@ -114,6 +124,7 @@ public class BallEngine {
 
 
 			if (isInsidePost (postL, shotBall)) {
+				hasServerScored = false;
 				clientScore++;
 				return 0;
 			} 
