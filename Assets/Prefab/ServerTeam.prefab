@@ -135,7 +135,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4284402996605784}
   m_Layer: 0
-  m_Name: StartServerBall
+  m_Name: ServerStartBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -180,7 +180,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1066923668264388}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.9, y: -0.48828125, z: 4.13}
+  m_LocalPosition: {x: -5.7, y: -0.48828125, z: 4.17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4103510674477994}
@@ -205,8 +205,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1465907107823464}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.4093223, y: 0, z: 2.5910861}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.54, y: 0, z: 3.86}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4103510674477994}
@@ -458,7 +458,6 @@ MonoBehaviour:
   initialBallYpos: 0
   amIServer: 0
   isMovementAllowed: 0
-  State: {fileID: 0}
   attemptedState: {fileID: 0}
   hasBall: 0
   material: {fileID: 2100000, guid: 2f33a554cf4c546e8a32b509dfcdb9c4, type: 2}
@@ -479,7 +478,6 @@ MonoBehaviour:
   initialBallYpos: 0
   amIServer: 0
   isMovementAllowed: 0
-  State: {fileID: 0}
   attemptedState: {fileID: 0}
   hasBall: 0
   material: {fileID: 2100000, guid: 2f33a554cf4c546e8a32b509dfcdb9c4, type: 2}
@@ -500,7 +498,6 @@ MonoBehaviour:
   initialBallYpos: 0
   amIServer: 0
   isMovementAllowed: 0
-  State: {fileID: 0}
   attemptedState: {fileID: 0}
   hasBall: 0
   material: {fileID: 2100000, guid: 2f33a554cf4c546e8a32b509dfcdb9c4, type: 2}
@@ -521,7 +518,6 @@ MonoBehaviour:
   initialBallYpos: 0
   amIServer: 0
   isMovementAllowed: 0
-  State: {fileID: 0}
   attemptedState: {fileID: 0}
   hasBall: 0
   material: {fileID: 2100000, guid: 2f33a554cf4c546e8a32b509dfcdb9c4, type: 2}
@@ -542,7 +538,6 @@ MonoBehaviour:
   initialBallYpos: 0
   amIServer: 0
   isMovementAllowed: 0
-  State: {fileID: 0}
   attemptedState: {fileID: 0}
   hasBall: 0
   material: {fileID: 2100000, guid: 2f33a554cf4c546e8a32b509dfcdb9c4, type: 2}
