@@ -38,6 +38,8 @@ public class Execution :MonoBehaviour {
 			server[i].transform.position=sPos[i];
 			server [i].GetComponent<PlayerBehaviour> ().attemptedState.transform.position = sPos [i];
 
+
+
 		}
 		ball.transform.position = bPos;
 		ball.GetComponent<BallBehaviour> ().ballPlayerIndexPrev = ball.GetComponent<BallBehaviour> ().ballPlayerIndex;
@@ -48,10 +50,10 @@ public class Execution :MonoBehaviour {
 		//score
 		if (amIServer) {
 			GameObject scoreUI = GameObject.Find ("ScoreBoard");
-			scoreUI.GetComponent<ScoreUI> ().score.text = "[you] :  "+score[0] +"-" +score[1]+"   : [friend]";
+			scoreUI.GetComponent<ScoreUI> ().score.text = "you :  ["+score[0] +"-" +score[1]+"]   : friend";
 		} else {
 			GameObject scoreUI = GameObject.Find ("ScoreBoard");
-			scoreUI.GetComponent<ScoreUI> ().score.text = "[you] :  "+score[1] +"-" +score[0]+"   : [friend]";
+			scoreUI.GetComponent<ScoreUI> ().score.text = "you :  ["+score[1] +"-" +score[0]+"]  : friend";
 		}
 //		print ("PlayeIndex on Execution:"+plIndex);
 

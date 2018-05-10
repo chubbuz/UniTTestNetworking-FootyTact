@@ -203,10 +203,10 @@ public class Engine : MonoBehaviour {
 			allPlayer [i] = server [i];
 
 
-			if (wasLastGoal) {
-				inst.transform.position = allPlayer [i];
-				Instantiate (inst);
-			}
+//			if (wasLastGoal) {
+//				inst.transform.position = allPlayer [i];
+//				Instantiate (inst);
+//			}
 
 
 		}

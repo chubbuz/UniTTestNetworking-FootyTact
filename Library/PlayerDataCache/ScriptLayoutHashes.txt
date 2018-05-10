@@ -1,6 +1,6 @@
-WindowsStandalone
+OSXStandalone
 PlayerPath?
-/MyStorage/Non-Personal/TacticalFootball_Windows.exe
+/Users/subeg/UnitTesting Networking/NetUnitTest.app
 SceneListBegin?
 Assets/Unit.unity
 SceneListEnd?

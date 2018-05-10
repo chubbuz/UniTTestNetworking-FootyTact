@@ -43,6 +43,7 @@ public class PlayerBehaviour : MonoBehaviour {
 		ball = GameObject.Find ("Ball");
 		initialBallYpos = ball.transform.position.y;
 
+
 		line  =this.GetComponent<LineRenderer>();
 		line.startWidth = 0.5f;
 		line.endWidth = 0.1f;
@@ -54,6 +55,18 @@ public class PlayerBehaviour : MonoBehaviour {
 
 	}
 
+
+	public void InitLine(){
+
+	
+		this.gameObject.AddComponent<LineRenderer> ();
+		line = this.GetComponent<LineRenderer> ();
+		line.startWidth = 0.5f;
+		line.endWidth = 0.1f;
+		line.SetPosition(0,this.transform.position);
+		line.SetPosition(1,this.transform.position);
+
+	}
 
 	void OnMouseDrag(){
 

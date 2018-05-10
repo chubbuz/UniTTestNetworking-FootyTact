@@ -64,12 +64,15 @@ public class SessionManager : MonoBehaviour {
 
 					//cleaning lines
 					LineRenderer cLine,sLine;
-					cLine=client[i].GetComponent<LineRenderer>();
-					cLine.startWidth = 0.0f;
-					cLine.endWidth = 0.0f;
-					sLine=server[i].GetComponent<LineRenderer>();
-					sLine.startWidth = 0.0f;
-					sLine.endWidth = 0.0f;
+					//cLine=client[i].GetComponent<LineRenderer>();
+					Destroy (client[i].GetComponent<LineRenderer>());
+
+//					cLine.startWidth = 0.0f;
+//					cLine.endWidth = 0.0f;
+					//=server[i].GetComponent<LineRenderer>();
+					Destroy (server[i].GetComponent<LineRenderer>());
+//					sLine.startWidth = 0.0f;
+//					sLine.endWidth = 0.0f;
 
 					sLine = null;
 					cLine = null;
@@ -101,14 +104,22 @@ public class SessionManager : MonoBehaviour {
 		sessionCount++;
 		//print ("activating movements for next session");
 		for (int i = 0; i < 5; i++) {
+
+
 			if (amIServer) {
 				//Server Sever Server
+				server [i].GetComponent<PlayerBehaviour> ().InitLine ();
+
 				client [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
 				server [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = true;
+
 			} else {
 				//Client Client Client
+				client [i].GetComponent<PlayerBehaviour> ().InitLine ();
 				client [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = true;
 				server [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
+
+
 			}
 		}
 		timeLeft = (float)sessionTime;
