@@ -27,15 +27,10 @@ public class PlayerBehaviour : MonoBehaviour {
 		hasBall = false;
 		if (transform.name == "ServerPlayer0") {
 			hasBall = true;
-			//			print ("ServerPlayer0 start Run i.e hasBall=false");
 		}
-		//State = this.transform;
-		//initialYPos = State.position.y;
 		isMovementAllowed = false;
 		attemptedState = new GameObject ("attemptedState").transform;
-		//		attemptedState = GameObject.Find ("EmptyTransform").transform;
 		attemptedState.position = this.transform.position;
-		//
 
 		GameObject ground = GameObject.Find ("Grass");
 		Vector3 groundPos = ground.transform.position;
@@ -45,6 +40,8 @@ public class PlayerBehaviour : MonoBehaviour {
 
 
 		line  =this.GetComponent<LineRenderer>();
+		line.material = new Material (Shader.Find("Particles/Additive"));
+
 		line.startWidth = 0.5f;
 		line.endWidth = 0.1f;
 		line.SetPosition(0,this.transform.position);
@@ -56,13 +53,8 @@ public class PlayerBehaviour : MonoBehaviour {
 	}
 
 
-	public void InitLine(){
+	public void ClearLine(){
 
-	
-		this.gameObject.AddComponent<LineRenderer> ();
-		line = this.GetComponent<LineRenderer> ();
-		line.startWidth = 0.5f;
-		line.endWidth = 0.1f;
 		line.SetPosition(0,this.transform.position);
 		line.SetPosition(1,this.transform.position);
 
@@ -76,51 +68,42 @@ public class PlayerBehaviour : MonoBehaviour {
 			float distance;
 			if (plane.Raycast (ray, out distance)) {
 				Vector3 cursorPosition = ray.GetPoint (distance);
-				line.startWidth = 0.5f;
-				line.endWidth = 0.1f;
 
 				if (this.hasBall) {
 					Vector3 correctPos = new Vector3 (cursorPosition.x, initialBallYpos, cursorPosition.z);
 					ball.GetComponent<BallBehaviour> ().attemptedPos = correctPos;
 					ball.GetComponent<BallBehaviour> ().hasBallmoved = true;
 
-					//line.material = new Material (material);
+
+					line.startColor = Color.blue;
+					line.endColor = Color.blue;
+
 					line.SetPosition (0, this.transform.position);
-//					sline.SetColors (Color.white, Color.white);
-
 					line.SetPosition (1, cursorPosition);
-					//line.SetWidth (0.5f, 0.1f);
-
-//					print (this.transform.name + "has ball");
-//					print ("passing ball by :"+this.transform.name );
-					line.startColor = Color.white;
-					line.endColor = Color.black;
 
 					messageUI.GetComponent<MessageUI> ().Display ("Could be a great Pass");
-
-
-
-//					
 
 
 				} else {
 					Vector3 correctPos = new Vector3 (cursorPosition.x, initialYPos, cursorPosition.z);
 					attemptedState.position = correctPos;
-					//State = this.transform;
 
+					if (amIServer) {
+						line.startColor = Color.white;
+						line.endColor = Color.white;
+
+					} else {
+						line.startColor = Color.gray;
+						line.endColor = Color.gray;
+
+					}
 
 					line.SetPosition (0, this.transform.position);
-//					line.SetColors (Color.green, Color.green);
 					line.SetPosition (1, cursorPosition);//end
-
-					line.startColor = Color.yellow;
-					line.endColor = Color.blue;
 
 					messageUI.GetComponent<MessageUI> ().Display ("This moves looks a real danger");
 
 	
-//					print ("moving:"+this.transform.name );
-
 				}
 
 			}

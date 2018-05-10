@@ -39,6 +39,11 @@ public class Linker : NetworkBehaviour {
 				//Server Sever Server
 				client [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
 				server [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = true;
+
+
+				server [i].GetComponent<PlayerBehaviour> ().amIServer = true;
+				client [i].GetComponent<PlayerBehaviour> ().amIServer = false;
+
 				controller.GetComponent<SessionManager> ().oppTeam = "ClientPlayer";
 				controller.GetComponent<SessionManager> ().amIServer = true;
 				controller.GetComponent<Execution> ().amIServer = true;
@@ -57,6 +62,11 @@ public class Linker : NetworkBehaviour {
 				//print ("I am a client");
 				client [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = true;
 				server [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
+
+				server [i].GetComponent<PlayerBehaviour> ().amIServer = true;
+				client [i].GetComponent<PlayerBehaviour> ().amIServer = false;
+
+
 				controller.GetComponent<SessionManager> ().oppTeam = "ServerPlayer";
 				controller.GetComponent<SessionManager> ().amIServer = false;
 				controller.GetComponent<Execution> ().amIServer = false;

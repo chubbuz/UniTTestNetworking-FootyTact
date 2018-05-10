@@ -52,33 +52,21 @@ public class SessionManager : MonoBehaviour {
 				
 
 
-			//	//print ("Time is Up");
 				timeUI = "Session:"+sessionCount+"Ended";	
 				toStartCount = false;
 				hasSent = true;
 
-//				//print ("deactivating server movements");
 				for (int i = 0; i < 5; i++) {
 					client[i].GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
 					server[i].GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
 
-					//cleaning lines
-					LineRenderer cLine,sLine;
-					//cLine=client[i].GetComponent<LineRenderer>();
-					Destroy (client[i].GetComponent<LineRenderer>());
 
-//					cLine.startWidth = 0.0f;
-//					cLine.endWidth = 0.0f;
-					//=server[i].GetComponent<LineRenderer>();
-					Destroy (server[i].GetComponent<LineRenderer>());
-//					sLine.startWidth = 0.0f;
-//					sLine.endWidth = 0.0f;
+					server [i].GetComponent<PlayerBehaviour> ().ClearLine ();
+					client [i].GetComponent<PlayerBehaviour> ().ClearLine ();
 
-					sLine = null;
-					cLine = null;
+
 				}
 
-				//print ("Calling Send Function from SessionManager");
 				GameObject linker = GameObject.FindWithTag("Linker");
 				linker.GetComponent<Linker>().Send();
 
@@ -108,14 +96,11 @@ public class SessionManager : MonoBehaviour {
 
 			if (amIServer) {
 				//Server Sever Server
-				server [i].GetComponent<PlayerBehaviour> ().InitLine ();
-
 				client [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
 				server [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = true;
 
 			} else {
 				//Client Client Client
-				client [i].GetComponent<PlayerBehaviour> ().InitLine ();
 				client [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = true;
 				server [i].GetComponent<PlayerBehaviour> ().isMovementAllowed = false;
 
